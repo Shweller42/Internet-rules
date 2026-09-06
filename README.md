@@ -18,4 +18,5 @@
 ## 📸 Скриншоты интерфейса
 <img width="851" height="644" alt="изображение" src="https://github.com/user-attachments/assets/e36f6469-2db0-4256-ac76-6ee31eb87be8" />
 <img width="1004" height="674" alt="изображение" src="https://github.com/user-attachments/assets/684059a9-b204-4d85-b0a3-66ac40565d9d" />
+<img width="913" height="316" alt="изображение" src="https://github.com/user-attachments/assets/d0078929-a1aa-4122-aff1-05c0130326ad" />
 
