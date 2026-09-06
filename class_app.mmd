@@ -1,0 +1,161 @@
+---
+title: Class Diagram — Безопасный интернет
+---
+classDiagram
+    class Theme {
+        +int Id
+        +string Title
+        +string Description
+        +string Icon
+        +List~Topic~ Topics
+    }
+    class Topic {
+        +int Id
+        +string Title
+        +string Icon
+        +string Description
+        +List~Rule~ Rules
+        +List~TestQuestion~ Questions
+        +List~SortCard~ SortCards
+        +List~string~ SortCategories
+        +CaseScenario? Case
+        +double ProgressPct
+        +bool HasProgress
+    }
+    class Rule {
+        +string Text
+        +string Example
+        +string Source
+    }
+    class TestQuestion {
+        +string Text
+        +List~string~ Options
+        +int CorrectIndex
+        +int UserAnswer
+    }
+    class SortCard {
+        +string Text
+        +int CorrectCategoryIndex
+        +int UserCategoryIndex
+    }
+    class CaseScenario {
+        +string Description
+        +List~CaseOption~ Options
+    }
+    class CaseOption {
+        +string Text
+        +bool IsCorrect
+        +string Explanation
+    }
+    class TestResult {
+        +int CorrectCount
+        +int TotalCount
+        +double Percentage
+        +string Grade
+        +List~ResultError~ Errors
+        +List~ResultError~ AllAnswers
+        +string ThemeName
+        +string TopicName
+    }
+    class ResultError {
+        +string Question
+        +string UserAnswer
+        +string CorrectAnswer
+        +bool IsCorrect
+    }
+    class TestSession {
+        +Topic Topic
+        +TestStage CurrentStage
+        +int CurrentQuestionIndex
+        +int TestCorrect
+        +int TestTotal
+        +List~ResultError~ TestErrors
+        +int SortCorrect
+        +int SortTotal
+        +bool CaseCorrect
+        +string CaseExplanation
+        +List~ResultError~ AllAnswers
+        +List~SortCardViewModel?~ SortCards
+        +List~SortCategoryViewModel?~ SortCategories
+        +GetCombinedResult() TestResult
+    }
+    class TestStage {
+        <<enumeration>>
+        NotStarted
+        Test
+        Sort
+        Case
+    }
+    class INavigationService {
+        <<interface>>
+        +CurrentSession TestSession?
+        +ShowTopics(Theme chapter) void
+        +ShowTheory(Topic topic) void
+        +ShowTest(Topic topic, TestSession? session) void
+        +ShowSort(Topic topic, TestSession session) void
+        +ShowCase(Topic topic, TestSession session) void
+        +ShowResult(TestResult result) void
+        +ShowProgress() void
+        +GoToMainPage() void
+    }
+    class MainWindow {
+        -List~Theme~ _chapters
+        -Theme? _currentChapter
+        -Topic? _currentTopic
+        -bool _isAtChapterLevel
+        ~TestSession? _currentSession
+        +MainWindow()
+        +GoToMainPage() void
+        +ShowTopics(Theme chapter) void
+        +ShowTheory(Topic topic) void
+        +ShowTest(Topic topic, TestSession? session) void
+        +ShowSort(Topic topic, TestSession session) void
+        +ShowCase(Topic topic, TestSession session) void
+        +ShowResult(TestResult result) void
+        +ShowProgress() void
+        -NavigateBack() void
+        -NavigateTo(Page page) void
+    }
+    class DatabaseService {
+        <<static>>
+        +Initialize() void
+        +SaveProgress(topicName, percentage, grade) void
+        +SaveTestAnswers(topicName, errors) void
+        +LoadProgress() List~ProgressRecord~
+        +GetTopicPercentage(topicName) double
+        +ResetAll() void
+    }
+    class ContentLoader {
+        <<static>>
+        -List~Theme?~ _cache
+        +Load() List~Theme~
+        +ClearCache() void
+    }
+    class ThemeData {
+        <<static>>
+        +GetAll() List~Theme~
+    }
+
+    Theme "1" --> "*" Topic : содержит
+    Topic "1" --> "*" Rule : содержит
+    Topic "1" --> "*" TestQuestion : содержит
+    Topic "1" --> "*" SortCard : содержит
+    Topic "1" --> "*" SortCategory : категории
+    Topic "1" --> "1" CaseScenario : содержит
+    CaseScenario "1" --> "*" CaseOption : варианты
+
+    TestSession --> Topic : тестирует
+    TestSession --> TestStage : состояние
+    TestSession --> SortCardViewModel
+    TestSession --> SortCategoryViewModel
+    TestSession ..> TestResult : создаёт
+
+    MainWindow ..|> INavigationService : реализует
+    MainWindow --> Theme : навигирует
+    MainWindow --> Topic : навигирует
+    MainWindow --> TestSession : управляет
+
+    DatabaseService ..> ProgressRecord : загружает
+    DatabaseService ..> TestResult : сохраняет
+    ContentLoader ..> ThemeData : использует
+    ContentLoader ..> Theme : загружает

@@ -1,0 +1,142 @@
+<Window x:Class="WpfApp1.ConfirmDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Background="{DynamicResource BgBrush}"
+        WindowStyle="None"
+        Title="Подтверждение"
+        WindowStartupLocation="CenterOwner"
+        Width="380" Height="193"
+        UseLayoutRounding="True"
+        TextOptions.TextFormattingMode="Display"
+        TextOptions.TextRenderingMode="ClearType">
+    <WindowChrome.WindowChrome>
+        <WindowChrome GlassFrameThickness="0" CornerRadius="20" ResizeBorderThickness="0" CaptionHeight="0"/>
+    </WindowChrome.WindowChrome>
+
+    <Border CornerRadius="20" Background="{DynamicResource SurfaceBrush}"
+            BorderBrush="#64748B" BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="48"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- HEADER with ellipses -->
+            <Border Grid.Row="0" Background="{DynamicResource PrimaryDarkerBrush}"
+                CornerRadius="20,20,0,0" ClipToBounds="True">
+                <Canvas>
+                    <Ellipse Canvas.Left="-10" Canvas.Top="-20" Width="60" Height="60" Opacity="0.035" Fill="White"/>
+                    <Ellipse Canvas.Left="200" Canvas.Top="10" Width="40" Height="40" Opacity="0.055" Fill="White"/>
+                    <Ellipse Canvas.Left="320" Canvas.Top="22" Width="30" Height="28" Opacity="0.08" Fill="White">
+                        <Ellipse.RenderTransform>
+                            <RotateTransform Angle="-18"/>
+                        </Ellipse.RenderTransform>
+                    </Ellipse>
+                    <Ellipse Canvas.Left="100" Canvas.Top="-5" Width="25" Height="26" Opacity="0.1" Fill="White">
+                        <Ellipse.RenderTransform>
+                            <RotateTransform Angle="12.5"/>
+                        </Ellipse.RenderTransform>
+                    </Ellipse>
+                    <Ellipse Canvas.Left="340" Canvas.Top="-25" Width="45" Height="42" Opacity="0.07" Fill="#1A202C">
+                        <Ellipse.RenderTransform>
+                            <RotateTransform Angle="28"/>
+                        </Ellipse.RenderTransform>
+                    </Ellipse>
+                </Canvas>
+            </Border>
+
+            <!-- Header text -->
+            <Grid Grid.Row="0" Background="Transparent" MouseDown="Header_MouseDown">
+                <StackPanel VerticalAlignment="Center" Margin="16,0,0,0">
+                    <TextBlock Text="Подтверждение" FontSize="19" FontWeight="Bold"
+                           FontFamily="Raleway" Foreground="White"/>
+                </StackPanel>
+                <Button Content="✕" Width="28" Height="28"
+                    Background="Transparent" Foreground="White" FontSize="14"
+                    Cursor="Hand" BorderThickness="0"
+                    HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,12,0"
+                    Click="No_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border CornerRadius="14" Background="{TemplateBinding Background}"
+                                BorderBrush="#FFFFFF66" BorderThickness="1"
+                                Width="28" Height="28">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#FFFFFF33"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+
+            <!-- Content -->
+            <Border Grid.Row="1" Background="{DynamicResource SurfaceBrush}"
+                CornerRadius="0,0,20,20" Padding="28,15,28,22">
+                <StackPanel VerticalAlignment="Top">
+                    <TextBlock Text="Вы уверены, что хотите удалить весь прогресс?" FontSize="20"
+                           Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap"
+                           TextAlignment="Center" FontWeight="Medium"/>
+                </StackPanel>
+            </Border>
+            <Button x:Name="YesBtn" Content="Да, сбросить" Height="42" Width="180"
+                Cursor="Hand" FontSize="14" FontWeight="SemiBold"
+                HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,84,0,0"
+                Grid.Row="1"
+                Click="Yes_Click">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bg" Background="#FC8181"
+                            CornerRadius="10" BorderThickness="0"
+                            Height="42"
+                            RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
+                                <ScaleTransform x:Name="ScaleT" ScaleX="1" ScaleY="1"/>
+                            </Border.RenderTransform>
+                            <ContentPresenter x:Name="Content"
+                                          HorizontalAlignment="Center" VerticalAlignment="Center"
+                                          TextElement.Foreground="White"
+                                          TextElement.FontWeight="SemiBold"
+                                          TextElement.FontSize="14"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <EventTrigger RoutedEvent="MouseEnter">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="ScaleT"
+                                                     Storyboard.TargetProperty="ScaleX"
+                                                     To="1.08" Duration="0:0:0.12"/>
+                                        <DoubleAnimation Storyboard.TargetName="ScaleT"
+                                                     Storyboard.TargetProperty="ScaleY"
+                                                     To="1.08" Duration="0:0:0.12"/>
+                                        <ColorAnimation Storyboard.TargetName="Bg"
+                                                     Storyboard.TargetProperty="Background.Color"
+                                                     To="#DC2626" Duration="0:0:0.12"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="MouseLeave">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="ScaleT"
+                                                     Storyboard.TargetProperty="ScaleX"
+                                                     To="1" Duration="0:0:0.12"/>
+                                        <DoubleAnimation Storyboard.TargetName="ScaleT"
+                                                     Storyboard.TargetProperty="ScaleY"
+                                                     To="1" Duration="0:0:0.12"/>
+                                        <ColorAnimation Storyboard.TargetName="Bg"
+                                                     Storyboard.TargetProperty="Background.Color"
+                                                     To="#FC8181" Duration="0:0:0.12"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </Grid>
+    </Border>
+</Window>

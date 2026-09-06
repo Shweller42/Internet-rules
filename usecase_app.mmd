@@ -1,0 +1,41 @@
+---
+title: Use Case Diagram — Безопасный интернет
+---
+flowchart TB
+    classDef actor fill:#fff,stroke:#1a1a2e,stroke-width:2,color:#1a1a2e,font-weight:bold,font-size:13px
+    classDef usecase fill:#e8f0fe,stroke:#1a1a2e,stroke-width:1.5,color:#1a1a2e,font-size:12px
+
+    subgraph SYSTEM["Обучающее приложение «Безопасный интернет»"]
+        direction TB
+        UC1("Просмотреть разделы")
+        UC2("Изучить теорию")
+        UC3("Пройти тест")
+        UC4("Выполнить сортировку")
+        UC5("Решить кейс")
+        UC6("Просмотреть результаты")
+        UC7("Посмотреть статистику")
+        UC8("Сбросить прогресс")
+    end
+
+    User((Пользователь)):::actor
+    DB((База данных\nSQLite)):::actor
+
+    User --> UC1
+    User --> UC2
+    User --> UC3
+    User --> UC4
+    User --> UC5
+    User --> UC6
+    User --> UC7
+    User --> UC8
+
+    UC2 -.->|&#171;include&#187;| UC3
+    UC3 -.->|&#171;include&#187;| UC4
+    UC4 -.->|&#171;include&#187;| UC5
+    UC5 -.->|&#171;include&#187;| UC6
+
+    DB -.-> UC6
+    DB -.-> UC7
+    DB -.-> UC8
+
+    class UC1,UC2,UC3,UC4,UC5,UC6,UC7,UC8 usecase

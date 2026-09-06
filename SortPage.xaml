@@ -1,0 +1,54 @@
+<Page x:Class="WpfApp1.SortPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="{DynamicResource BgBrush}" Title="Сортировка">
+    <Page.Resources>
+        <Style x:Key="ProgressBtn" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.4"/>
+                    <Setter Property="Background" Value="#A0AEC0"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
+
+    <Grid Margin="32" x:Name="RootGrid">
+        <ScrollViewer VerticalScrollBarVisibility="Hidden">
+            <StackPanel>
+                <TextBlock Text="📦 Сортировка карточек" FontSize="22" FontWeight="SemiBold"
+                           Foreground="{DynamicResource TextBrush}" Margin="0,0,0,4"/>
+                <TextBlock x:Name="HelpText" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,16"/>
+
+                <Border Background="{DynamicResource SurfaceBrush}" CornerRadius="16"
+                        BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1"
+                        Padding="24" MinHeight="200" Margin="0,0,0,16">
+                    <StackPanel>
+                        <TextBlock FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"
+                                   Margin="0,0,0,12">Потяните карточку мышкой в нужную категорию:</TextBlock>
+                        <WrapPanel x:Name="CardsPanel" Margin="0,0,0,16"/>
+
+                        <TextBlock FontSize="14" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextBrush}" Margin="0,0,0,8">Категории:</TextBlock>
+                        <WrapPanel x:Name="CategoriesPanel"/>
+                    </StackPanel>
+                </Border>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="NextBtn" Content="Далее →" Style="{StaticResource ProgressBtn}"
+                            Height="42" MinWidth="150" Padding="16,10" IsEnabled="False" Click="Next_Click"/>
+                    <Button x:Name="ContinueBtn" Content="Продолжить →" Style="{StaticResource ProgressBtn}"
+                            Height="42" MinWidth="150" Padding="16,10" Visibility="Collapsed"
+                            Background="{DynamicResource SuccessBrush}" Click="Continue_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+        <Canvas x:Name="DragOverlay" IsHitTestVisible="False"/>
+    </Grid>
+</Page>
